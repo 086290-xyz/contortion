@@ -8,6 +8,9 @@ const DIST_FOLDER = "./dist";
 
 const total = Math.floor((+new Date() - START_DATE) / (1000 * 60 * 60 * 24));
 
+/** @type {string[]} */
+const filenameList = [];
+
 await fs.readdir(DB_FOLDER, {
     withFileTypes: true
 }).then(async (dirents) => {
@@ -16,7 +19,8 @@ await fs.readdir(DB_FOLDER, {
         const filename = dirent.name;
         if (Number(path.parse(filename).name) <= total) {
             await fs.rename(path.join(DB_FOLDER, filename), path.join(DIST_FOLDER, filename));
+            filenameList.push(filename);
         }
     }
-})
-await fs.copyFile("index.html", path.join(DB_FOLDER, "index.html"));
+});
+await fs.writeFile(path.join(DIST_FOLDER, "list.json"), JSON.stringify(filenameList));
