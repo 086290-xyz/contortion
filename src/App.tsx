@@ -55,9 +55,12 @@ function App() {
   const [filename, setFilename] = useState<string>("7.jpg");
   fetch(`${HOST}list.json`)
     .then((r) => r.json())
-    .then((j: string[]) =>
-      setList(j.sort((a, b) => filenameToNumber(b) - filenameToNumber(a)))
-    );
+    .then((j: string[]) => {
+      const sorted = j.sort((a, b) => filenameToNumber(b) - filenameToNumber(a));
+      setList(sorted);
+      setFilename(sorted[0]);
+      (document.getElementById("my-modal") as HTMLInputElement).checked = true;
+    });
   return (
     <div className="p-12">
       <h1 className="text-3xl font-bold mb-8">Daily Contortion</h1>
