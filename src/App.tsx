@@ -51,11 +51,7 @@ function Card(props: { filename: string; onClick: () => void }) {
 }
 
 function App() {
-  const [list, setList] = useState<string[]>(
-    Array(24)
-      .fill(0)
-      .map((_, i) => `${i}.jpg`)
-  );
+  const [list, setList] = useState<string[]>([]);
   const [filename, setFilename] = useState<string>("7.jpg");
   fetch(`${HOST}list.json`)
     .then((r) => r.json())
@@ -66,9 +62,9 @@ function App() {
     <div className="p-12">
       <h1 className="text-3xl font-bold mb-8">Daily Contortion</h1>
       <div className="grid gap-8 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-        {list.map((name, i) => (
+        {list.map((name) => (
           <Card
-            key={i}
+            key={name}
             filename={name}
             onClick={() => setFilename(name)}
           ></Card>
