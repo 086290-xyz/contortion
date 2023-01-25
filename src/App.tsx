@@ -62,8 +62,7 @@ function App() {
         );
         setList(sorted);
         setFilename(sorted[0]);
-        (document.getElementById("my-modal") as HTMLInputElement).checked =
-          true;
+        // (document.getElementById("my-modal") as HTMLInputElement).checked = true;
       });
   }, []);
   return (
