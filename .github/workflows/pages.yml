@@ -15,26 +15,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       - name: Checkout DB
         uses: actions/checkout@v3
         with:
           repository: 086290-xyz/contortion-database
           token: ${{ secrets.DATABASE_PAT }}
           path: "./db"
-      - name: Setup Node
-        uses: actions/setup-node@v3
+
+      - uses: actions/setup-node@v3
         with:
           node-version: "18"
-      - name: Setup Pages
-        run: |
-          node bin/setup.mjs
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+          cache: "pnpm"
+      - uses: pnpm/action-setup@v2
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm setup-db
+
+      - uses: actions/upload-pages-artifact@v1
         with:
-          path: "./db"
-  
+          path: "./dist"
+
   deploy:
     environment:
       name: github-pages
@@ -42,6 +44,5 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v1
